@@ -76,11 +76,6 @@ public func test_escaped_dependencies_in_app() {
         .withEscapedDependencies_inApp
     }
 
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-        command1.action()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            command2.action()
-        }
-    }
+    command1.action()
+    command2.action()
 }

@@ -6,7 +6,7 @@ import XCTest
 
 final class DepsBugTests: XCTestCase {
 
-    func test_escaped_dependencies() {
+    func test_escaped_dependencies() async throws {
         let currentValue = Dependency(\.areDependenciesLost).wrappedValue
 
         let command1 = withDependencies {
@@ -19,6 +19,15 @@ final class DepsBugTests: XCTestCase {
         }
 
         let command2 = withDependencies {
+            $0.areDependenciesLost = false
+        } operation: {
+            Command {
+                Dependency(\.areDependenciesLost).wrappedValue
+            }
+            .withEscapedDependencies_inFramework
+        }
+        
+        let command3 = withDependencies {
             $0.areDependenciesLost = false
         } operation: {
             Command {
